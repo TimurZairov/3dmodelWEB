@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
-    'use srict';
+    'use strict';
     //timer
     function countTimer(deadLine) {
             // объявляем переменные
@@ -9,7 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
             function getTimeRamaining(){
             let dateStop = new Date(deadLine).getTime(), // deadline передаем в при вызове функции counterTimer
-            dateNow = new Date().getTime(); // берем сегодняшний день
+            dateNow = new Date().getTime(), // берем сегодняшний день
             timeRamainig = (dateStop - dateNow) / 1000; // вычитываем милисекунды до конца deadLine-ф 
             seconds = Math.floor(timeRamainig % 60);    // округляем с помощью mathfloor и полученные милисекунды делим с остатком 
             minutes = Math.floor((timeRamainig / 60) % 60); // так же вычисляем и минуты
@@ -55,7 +55,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const btnMenu = document.querySelector('.menu'),
             menu = document.querySelector('menu'),
             // можно получать элементы с HTML страницы так (выделяем все li)
-            menuItems = menu.querySelectorAll('ul>li');
+         menuItems = menu.querySelectorAll('ul>li');
         // Закрывание и открывание кнопки меню (что бы код не повторять перенсли сюда и передали функцию в события)
         const handlerMenu = () => {
             menu.classList.toggle('active-menu');
@@ -63,17 +63,17 @@ window.addEventListener('DOMContentLoaded', () => {
         // при нажатии на кнопку "меню" открывает и скрывает всплывающее меню меню(условие их handlerMenu)
         btnMenu.addEventListener('click', handlerMenu);
 
-        menu.addEventListener('click', event => {
+        menu.addEventListener('click', (event) => {
             const target = event.target;
 
             if (target.classList.contains('close-btn')) {
-                menu.style.transform = `translate(-100%)`;
+             menu.classList.toggle('active-menu');
+            }else if(target.tagName === 'A'){
+                menu.classList.toggle('active-menu');
             }
+
             if (target.tagName === 'MENU') {
                 return;
-            }
-            if(target.tagName === 'A'){
-                menu.style.transform = `translate(-100%)`;
             }
         });
     };
