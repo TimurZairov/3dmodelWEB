@@ -177,14 +177,14 @@ window.addEventListener('DOMContentLoaded', () => {
             let currentSlide = 0,
                 interval;
         // к кадому слайду создаем свой дот
-        let plusSlides = () => {
+        let plusDots = () => {
              slide.forEach(() => {
                 let newDot = document.createElement('li');
                 newDot.classList.add('dot');
                 portfilioDots.append(newDot);
             })
         }
-        plusSlides();
+        plusDots();
         // добавленные элементы нужно выбрать псоле создания что бы весь скрипт заработал
         let dot = portfilioDots.querySelectorAll('.dot');
         // elem = slide, index = currentSlide, strClass = 'portfolio-item-active'; 
