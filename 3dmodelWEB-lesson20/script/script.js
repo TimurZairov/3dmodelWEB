@@ -170,12 +170,23 @@ window.addEventListener('DOMContentLoaded', () => {
     const slider = () => {
         const slide = document.querySelectorAll('.portfolio-item'),
             btn = document.querySelectorAll('.portfolio-btn'),
-            dot = document.querySelectorAll('.dot'),
+            portfilioDots = document.querySelector('.portfolio-dots'),
             slider = document.querySelector('.portfolio-content');
         // получили массив из элементов slide и задаем первый слайд из массива индекс 0й
+
             let currentSlide = 0,
                 interval;
-
+        // к кадому слайду создаем свой дот
+        let plusSlides = () => {
+             slide.forEach(() => {
+                let newDot = document.createElement('li');
+                newDot.classList.add('dot');
+                portfilioDots.append(newDot);
+            })
+        }
+        plusSlides();
+        // добавленные элементы нужно выбрать псоле создания что бы весь скрипт заработал
+        let dot = portfilioDots.querySelectorAll('.dot');
         // elem = slide, index = currentSlide, strClass = 'portfolio-item-active'; 
         //элементы получаем из функции autoplayslide
             const prevSlide = (elem, index, strClass) => {
@@ -255,6 +266,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 startSlide();
             }
         })
+
     }
     slider();
 });
