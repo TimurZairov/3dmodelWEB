@@ -31,7 +31,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }else{
                 return num;
             }
-        };
+        }
         
           // что бы при перезагрузке не выдавал картинку при верстке а сразу показывал нужный нам таймер
         function updateClock (){
@@ -101,14 +101,14 @@ window.addEventListener('DOMContentLoaded', () => {
                             count++;
                             popupContetn.style.transform = `translateY(${count}px)`;
                         }
-                    }, 1)
+                    }, 1);
                 }else{
                     // анимация не работает
                     popup.style.display = 'block';
                     popupContetn.style.transform = '';
                 }
 
-            })
+            });
         });
         popup.addEventListener('click', (event) => {
             let target = event.target;
@@ -116,13 +116,13 @@ window.addEventListener('DOMContentLoaded', () => {
             if(target.classList.contains('popup-close')){
                 popup.style.display = 'none';
             }else{
-                target = target.closest('.popup-content')
+                target = target.closest('.popup-content');
                 if(!target){
                     popup.style.display = 'none';
                 }
             }
 
-        })
+        });
     };
     tooglePopUp();
 
@@ -150,7 +150,7 @@ window.addEventListener('DOMContentLoaded', () => {
             tabHeader.addEventListener('click', (event) => {
                 // присваиваем переменоой target = событие event.target
                 let target = event.target;
-                    target = target.closest('.service-header-tab')
+                    target = target.closest('.service-header-tab');
                 // проверяем принадлжеит ли таргет к родителю с классом service-header-tab, если да то уловие работает
                 if(target){
                 tab.forEach((item, i) => {
@@ -162,8 +162,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
                 }
                 
-            })
-        }
+            });
+        };
     tabs();
 
     //slider 
@@ -182,8 +182,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 let newDot = document.createElement('li');
                 newDot.classList.add('dot');
                 portfilioDots.append(newDot);
-            })
-        }
+            });
+        };
         plusDots();
         // добавленные элементы нужно выбрать псоле создания что бы весь скрипт заработал
         let dot = portfilioDots.querySelectorAll('.dot');
@@ -191,11 +191,11 @@ window.addEventListener('DOMContentLoaded', () => {
         //элементы получаем из функции autoplayslide
             const prevSlide = (elem, index, strClass) => {
                 elem[index].classList.remove(strClass);
-            }
+            };
             
             const nextSlide = (elem, index, strClass) => {
                 elem[index].classList.add(strClass);
-            }
+            };
 
         // перебор слайдеров атоматически 
         const autoPlaySlide = () => {
@@ -226,7 +226,7 @@ window.addEventListener('DOMContentLoaded', () => {
             let target = event.target;
             // условие если кликаем мимо мтрелок на слайде и точек
             if(!target.matches('.portfolio-btn, .dot')){
-                return
+                return;
             }
             // должен быть вызов функции до условий
             prevSlide(slide, currentSlide, 'portfolio-item-active');
@@ -242,7 +242,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         currentSlide = index;
                     }
                 });
-            };
+            }
             // условие если если пришли к концу массива, переход к первому элементу масива
             if(currentSlide >= slide.length){
                 currentSlide = 0;
@@ -260,13 +260,79 @@ window.addEventListener('DOMContentLoaded', () => {
             if(event.target.matches('.portfolio-btn') || event.target.matches('.dot')){
                 stopSlide();
             }
-        })
+        });
         slider.addEventListener('mouseout', (event) => {
             if(event.target.matches('.portfolio-btn') || event.target.matches('.dot')){
                 startSlide();
             }
-        })
+        });
 
-    }
+    };
     slider();
+
+    //наша команда
+
+    //photo
+        // менять картинки команды
+        const photoImg = document.querySelectorAll('.command__photo');
+        photoImg.forEach(item => {
+            const imgSrc = item.src;
+            item.addEventListener('mouseenter', (e) => {
+                e.target.src = e.target.dataset.img;
+            });
+            
+            item.addEventListener('mouseout', (e) => {
+                e.target.src = imgSrc;
+            });
+        });
+
+    // calculator 
+        //можно писать только цифры
+        const numberType = () => {
+            const calcItem = document.querySelectorAll('.calc-item');
+            const formPhone = document.querySelectorAll('.form-phone');
+            console.log(formPhone);
+            calcItem.forEach((item) => {
+                item.addEventListener('input', () => {
+                    item.value = item.value.replace(/\D/g, '');
+                });
+            });
+            formPhone.forEach((item) => {
+                item.addEventListener('input', () => {
+                    item.value = item.value.replace(/\D/g, '');
+                });
+            });
+
+        };
+        numberType();
+
+        //ввод только кириллицы
+        const russianType = () => {
+            const nameInput = document.querySelector('.top-form');
+            const textInput = document.querySelector('.mess');
+            nameInput.addEventListener('input', () => {
+                nameInput.value = nameInput.value.replace(/[0-9A-Za-z\*\!\@\"\№\;\%\:\?\+\=\()\#\$\%\^\&\_\'\/\\]/g, '');
+            });
+
+            textInput.addEventListener('input', () => {
+                textInput.value = textInput.value.replace(/[0-9A-Za-z\*\!\@\"\№\;\%\:\?\+\=\()\#\$\%\^\&\_\'\/\\]/g, '');
+            });
+        };
+        russianType();
+
+        //emailform 
+        const emailInput = () => {
+            const formEmail = document.querySelectorAll('.form-email');
+            formEmail.forEach((item) => {
+                item.addEventListener('input', () => {
+                    item.value = item.value.replace(/[^@A-Za-z\-\_\.\!\~\*\']/g, '');
+                    return item.value.replace(/w+@\w+\.\w{3}/g, '');
+                });
+
+            });
+
+        };
+        emailInput();
+
+
 });
