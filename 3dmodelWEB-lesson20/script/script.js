@@ -286,15 +286,16 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-    // calculator 
-        //можно писать только цифры
+        //можно писать только цифры надо исправить тут есть глюк
         const numberType = () => {
             const calcItem = document.querySelectorAll('.calc-item');
             const formPhone = document.querySelectorAll('.form-phone');
-            console.log(formPhone);
+           
             calcItem.forEach((item) => {
                 item.addEventListener('input', () => {
-                    item.value = item.value.replace(/\D/g, '');
+                    if(!item.classList.contains('calc-type')){
+                        item.value = item.value.replace(/\D/g, '');
+                    }
                 });
             });
             formPhone.forEach((item) => {
@@ -333,6 +334,5 @@ window.addEventListener('DOMContentLoaded', () => {
 
         };
         emailInput();
-
 
 });
