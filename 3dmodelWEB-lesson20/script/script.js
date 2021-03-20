@@ -300,7 +300,7 @@ window.addEventListener('DOMContentLoaded', () => {
             });
             formPhone.forEach((item) => {
                 item.addEventListener('input', () => {
-                    item.value = item.value.replace(/\D/g, '');
+                    item.value = item.value.replace(/[A-Za-zА-Яа-я\*\!\@\"\№\;\%\:\?\=\()\#\$\%\^\&\_\'\/\\]/g, '');
                 });
             });
 
@@ -334,5 +334,156 @@ window.addEventListener('DOMContentLoaded', () => {
 
         };
         emailInput();
+
+        const sendForm = () => {
+            //переменные для вывода сообщение 
+            const errorMessage = 'Что то пошло не так...',
+                loadMessage = 'Загрузка...',
+                successMessage = 'Спасибо! Мы с вами свяжемся!';
+            // берем нашу форму первая форма
+
+
+    const form1 = () => {
+                const form = document.getElementById('form1'),
+                formName = document.querySelector('.form-name'),
+                formEmail = document.querySelector('.form-email'),
+                formPhone = document.querySelector('.form-phone');
+
+            // создаем див куда будем выводить сообщение
+            const statusMessage = document.createElement('div');
+            statusMessage.style.cssText = 'font-size: 2rem;';
+            //слушатель на сабмит
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                form.appendChild(statusMessage);
+                statusMessage.textContent = loadMessage;
+                const formData = new FormData(form);
+                //объект body  что бы записывать ткда данные
+                let body = {};
+
+/*                 for(let val of formData.entries()){
+                    body[val[0]] = val[1];
+                } */
+
+                // перебор массива formdata для присваивания в боди знччений 
+                formData.forEach((val, key) => {
+                    body[key] = val;
+                });
+
+                formName.value = '';
+                formEmail.value = '';
+                formPhone.value = '';
+                // передаем body при вызове пост дата(есть колбэк функция)
+                postData(body, () => {
+                    statusMessage.textContent = successMessage;
+                }, (error) => {
+                    console.log(error);
+                    statusMessage.textContent = errorMessage;
+                });
+            });
+    };
+    form1();
+
+    //фторая форма
+        const form2 = () => {
+            const form2 = document.getElementById('form2'),
+            formName2 = document.getElementById('form2-name'),
+            formEmail2 = document.getElementById('form2-email'),
+            formPhone2 = document.getElementById('form2-phone'),
+            formMessage = document.getElementById('form2-message');
+        // создаем див куда будем выводить сообщение
+        const statusMessage = document.createElement('div');
+        statusMessage.style.cssText = 'font-size: 2rem;';
+        //слушатель на сабмит
+        form2.addEventListener('submit', (event) => {
+            event.preventDefault();
+            form2.appendChild(statusMessage);
+            statusMessage.textContent = loadMessage;
+            const formData = new FormData(form2);
+            //объект body  что бы записывать ткда данные
+            let body = {};
+
+
+            // перебор массива formdata для присваивания в боди знччений 
+            formData.forEach((val, key) => {
+                body[key] = val;
+            });
+            formName2.value = '';
+            formEmail2.value = '';
+            formPhone2.value = '';
+            formMessage.value = '';
+            // передаем body при вызове пост дата(есть колбэк функция)
+            postData(body, () => {
+                statusMessage.textContent = successMessage;
+            }, (error) => {
+                console.log(error);
+                statusMessage.textContent = errorMessage;
+            });
+        });
+    };
+    form2();
+
+        // форма 3
+        const form3 = () => {
+            const form3 = document.getElementById('form3');
+            const popup = document.querySelector('.popup');
+        // создаем див куда будем выводить сообщение
+        const statusMessage = document.createElement('div');
+        statusMessage.style.cssText = 'font-size: 2rem;';
+        //слушатель на сабмит
+        form3.addEventListener('submit', (event) => {
+            event.preventDefault();
+            popup.style.display = 'none';
+            
+            const formData = new FormData(form3);
+            //объект body  что бы записывать ткда данные
+            let body = {};
+
+
+            // перебор массива formdata для присваивания в боди знччений 
+            formData.forEach((val, key) => {
+                body[key] = val;
+            });
+            // передаем body при вызове пост дата(есть колбэк функция)
+            postData(body, () => {
+                statusMessage.textContent = successMessage;
+            }, (error) => {
+                console.log(error);
+                statusMessage.textContent = errorMessage;
+            });
+        });
+    };
+    form3();
+
+
+
+            // берем нашу форму вторая форма
+
+            const postData = (body, outputData, errorData) => {
+                   // создаем реквест после навешивания слушателя что бы выводить загрузку
+                   const request = new XMLHttpRequest();
+                   request.addEventListener('readystatechange', () => {
+                       // условия их 4 стадии, запуск идет с 0 и будет выводиться (загрзук)
+                       if(request.readyState !== 4) {
+                           return;
+                       }
+                       //Когда статус будет 200 будет успешно если нет то ошибка
+                       if(request.status === 200){
+                           // тут вызываем колбэк функцию
+                           outputData();
+                       }else{
+                            errorData(request.status);
+                       }
+                   });
+                   //тут пока темный лес)
+                   request.open('POST', './server.php');
+                   request.setRequestHeader('Content-Type', 'application/json');
+
+   
+                   // записываем все в json
+                   request.send(JSON.stringify(body));
+            };
+        };
+        sendForm();
 
 });
