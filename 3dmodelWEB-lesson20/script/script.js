@@ -280,12 +280,10 @@ window.addEventListener('DOMContentLoaded', () => {
             item.addEventListener('mouseenter', (e) => {
                 e.target.src = e.target.dataset.img;
             });
-            
             item.addEventListener('mouseout', (e) => {
                 e.target.src = imgSrc;
             });
         });
-
         //можно писать только цифры надо исправить тут есть глюк
         const numberType = () => {
             const calcItem = document.querySelectorAll('.calc-item');
@@ -334,15 +332,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
         };
         emailInput();
-
+//отправка данных
         const sendForm = () => {
             //переменные для вывода сообщение 
             const errorMessage = 'Что то пошло не так...',
                 loadMessage = 'Загрузка...',
                 successMessage = 'Спасибо! Мы с вами свяжемся!';
             // берем нашу форму первая форма
-
-
     const form1 = () => {
                 const form = document.getElementById('form1'),
                 formName = document.querySelector('.form-name'),
@@ -374,9 +370,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 formEmail.value = '';
                 formPhone.value = '';
                 // передаем body при вызове пост дата(есть колбэк функция)
-                postData(body, () => {
+                postData(body)
+                .then(() => {
                     statusMessage.textContent = successMessage;
-                }, (error) => {
+                })
+                .catch((error) => {
                     console.log(error);
                     statusMessage.textContent = errorMessage;
                 });
@@ -408,21 +406,23 @@ window.addEventListener('DOMContentLoaded', () => {
             formData.forEach((val, key) => {
                 body[key] = val;
             });
+            console.log(formName2.value);
             formName2.value = '';
             formEmail2.value = '';
             formPhone2.value = '';
             formMessage.value = '';
             // передаем body при вызове пост дата(есть колбэк функция)
-            postData(body, () => {
+            postData(body)
+            .then(() => {
                 statusMessage.textContent = successMessage;
-            }, (error) => {
+            })
+            .catch((error) => {
                 console.log(error);
                 statusMessage.textContent = errorMessage;
             });
         });
     };
     form2();
-
         // форма 3
         const form3 = () => {
             const form3 = document.getElementById('form3');
@@ -434,54 +434,51 @@ window.addEventListener('DOMContentLoaded', () => {
         form3.addEventListener('submit', (event) => {
             event.preventDefault();
             popup.style.display = 'none';
-            
             const formData = new FormData(form3);
             //объект body  что бы записывать ткда данные
             let body = {};
-
-
             // перебор массива formdata для присваивания в боди знччений 
             formData.forEach((val, key) => {
                 body[key] = val;
             });
             // передаем body при вызове пост дата(есть колбэк функция)
-            postData(body, () => {
+            postData(body)
+            .then(() => {
                 statusMessage.textContent = successMessage;
-            }, (error) => {
+            })
+            .catch((error) => {
                 console.log(error);
                 statusMessage.textContent = errorMessage;
             });
         });
     };
     form3();
-
-
-
-            // берем нашу форму вторая форма
-
-            const postData = (body, outputData, errorData) => {
+ // берем нашу форму вторая форма
+            const postData = (body) => {
                    // создаем реквест после навешивания слушателя что бы выводить загрузку
-                   const request = new XMLHttpRequest();
-                   request.addEventListener('readystatechange', () => {
-                       // условия их 4 стадии, запуск идет с 0 и будет выводиться (загрзук)
-                       if(request.readyState !== 4) {
-                           return;
-                       }
-                       //Когда статус будет 200 будет успешно если нет то ошибка
-                       if(request.status === 200){
-                           // тут вызываем колбэк функцию
-                           outputData();
-                       }else{
-                            errorData(request.status);
-                       }
-                   });
-                   //тут пока темный лес)
-                   request.open('POST', './server.php');
-                   request.setRequestHeader('Content-Type', 'application/json');
+            return new Promise((resolve, reject) => {
+                const request = new XMLHttpRequest();
+                request.addEventListener('readystatechange', () => {
+                    // условия их 4 стадии, запуск идет с 0 и будет выводиться (загрзук)
+                    if(request.readyState !== 4) {
+                        return;
+                    }
+                    //Когда статус будет 200 будет успешно если нет то ошибка
+                    if(request.status === 200){
+                        // тут вызываем колбэк функцию
+                        resolve();
+                    }else{
+                        reject(request.status);
+                    }
+                            //тут пока темный лес)
+                request.open('POST', './server.php');
+                request.setRequestHeader('Content-Type', 'application/json');
+                // записываем все в json
+                request.send(JSON.stringify(body));
+                    });
+                });
 
-   
-                   // записываем все в json
-                   request.send(JSON.stringify(body));
+
             };
         };
         sendForm();
