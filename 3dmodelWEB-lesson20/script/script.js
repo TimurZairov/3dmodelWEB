@@ -371,12 +371,15 @@ window.addEventListener('DOMContentLoaded', () => {
                 formPhone.value = '';
                 // передаем body при вызове пост дата(есть колбэк функция)
                 postData(body)
-                .then(() => {
+                .then((response) => {
+                    if (response.status !== 200) {
+                        throw new Error('status network not 200');
+                        }
                     statusMessage.textContent = successMessage;
                 })
                 .catch((error) => {
-                    console.log(error);
                     statusMessage.textContent = errorMessage;
+                    console.log(error);
                 });
             });
     };
@@ -413,12 +416,15 @@ window.addEventListener('DOMContentLoaded', () => {
             formMessage.value = '';
             // передаем body при вызове пост дата(есть колбэк функция)
             postData(body)
-            .then(() => {
+            .then((response) => {
+                if (response.status !== 200) {
+                    throw new Error('status network not 200');
+                    }
                 statusMessage.textContent = successMessage;
             })
             .catch((error) => {
-                console.log(error);
                 statusMessage.textContent = errorMessage;
+                console.log(error);
             });
         });
     };
@@ -443,34 +449,28 @@ window.addEventListener('DOMContentLoaded', () => {
             });
             // передаем body при вызове пост дата(есть колбэк функция)
             postData(body)
-            .then(() => {
+            .then((response) => {
+                if (response.status !== 200) {
+                    throw new Error('status network not 200');
+                    }
                 statusMessage.textContent = successMessage;
             })
             .catch((error) => {
-                console.log(error);
                 statusMessage.textContent = errorMessage;
+                console.log(error);
             });
         });
     };
     form3();
  // берем нашу форму вторая форма
         const postData = (body) => {
-            return new Promise((resolve, reject) => {
-            const request = new XMLHttpRequest();
-            request.addEventListener('readystatechange', () => {
-            if (request.readyState !== 4) {
-            return;
-            }
-            if (request.status === 200) {
-            resolve();
-            } else {
-            reject(request.status);
-            }
-            });
-            request.open('POST', './server.php');
-            request.setRequestHeader('Content-Type', 'application/json');
-            request.send(JSON.stringify(body));
-            });
+            return fetch('./server.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+                });
             };
         };
         sendForm();
