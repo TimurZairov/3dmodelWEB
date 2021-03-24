@@ -454,31 +454,23 @@ window.addEventListener('DOMContentLoaded', () => {
     };
     form3();
  // берем нашу форму вторая форма
-            const postData = (body) => {
-                   // создаем реквест после навешивания слушателя что бы выводить загрузку
+        const postData = (body) => {
             return new Promise((resolve, reject) => {
-                const request = new XMLHttpRequest();
-                request.addEventListener('readystatechange', () => {
-                    // условия их 4 стадии, запуск идет с 0 и будет выводиться (загрзук)
-                    if(request.readyState !== 4) {
-                        return;
-                    }
-                    //Когда статус будет 200 будет успешно если нет то ошибка
-                    if(request.status === 200){
-                        // тут вызываем колбэк функцию
-                        resolve();
-                    }else{
-                        reject(request.status);
-                    }
-                            //тут пока темный лес)
-                request.open('POST', './server.php');
-                request.setRequestHeader('Content-Type', 'application/json');
-                // записываем все в json
-                request.send(JSON.stringify(body));
-                    });
-                });
-
-
+            const request = new XMLHttpRequest();
+            request.addEventListener('readystatechange', () => {
+            if (request.readyState !== 4) {
+            return;
+            }
+            if (request.status === 200) {
+            resolve();
+            } else {
+            reject(request.status);
+            }
+            });
+            request.open('POST', './server.php');
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.send(JSON.stringify(body));
+            });
             };
         };
         sendForm();
